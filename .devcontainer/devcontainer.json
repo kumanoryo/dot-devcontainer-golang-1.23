@@ -1,0 +1,63 @@
+{
+    "name": "dot-devcontainer-golang-1.23",
+    "image": "ghcr.io/bearfield/golang:1.23",
+    "remoteUser": "kumano_ryo",
+    "mounts": [
+        "source=${localEnv:HOME}/devcontainer_conf/.gitconfig_linux,target=/home/kumano_ryo/.gitconfig,type=bind,consistency=cached",
+        "source=${localEnv:HOME}/.config/gcloud,target=/home/kumano_ryo/.config/gcloud,type=bind,consistency=cached",
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "postStartCommand": "sudo chown root:docker /var/run/docker.sock",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.profiles.linux": {
+                    "fish": {
+                        "path": "fish"
+                    }
+                },
+                "terminal.integrated.fontFamily": "Source Code Pro for Powerline",
+                "workbench.colorCustomizations": {
+                    "statusBar.background": "#00ADD8",
+                    "statusBar.foreground": "#000000"
+                },
+                "go.interGopath": false,
+                "go.useLanguageServer": true,
+                "go.toolsEnvVars": {
+                    "GO111MODULE": "on"
+                },
+                "[go]": {
+                    "editor.snippetSuggestions": "none",
+                    "editor.formatOnSave": true
+                },
+                "gopls": {
+                    "usePlaceholders": true,
+                    "formatting.gofumpt": true
+                },
+                "go.lintTool": "golangci-lint",
+                "go.lintFlags": [
+                    "--fast",
+                    "--print-issued-lines=false",
+                    "--out-format=colored-line-number",
+                    "--issues-exit-code=0"
+                ],
+                "go.testTimeout": "1800s",
+                "go.testFlags": ["-v", "-count=1"],
+                "go.testEnvVars": {
+                }
+            },
+            "extensions": [
+                "wayou.vscode-todo-highlight",
+                "redhat.vscode-yaml",
+                "timonwong.shellcheck",
+                "foxundermoon.shell-format",
+                "github.copilot",
+                "bmalehorn.vscode-fish",
+                "github.copilot-chat",
+                "ms-azuretools.vscode-docker",
+                "ms-vscode.makefile-tools",
+                "golang.go"
+            ]
+        }
+    }
+}
