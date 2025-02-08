@@ -2,7 +2,7 @@ FROM ghcr.io/bearfield/debian-fish:bookworm
 #
 # set env
 ENV GOLANG_VERSION=1.23.1
-ENV PATH /usr/local/go/bin:$PATH
+ENV PATH=/usr/local/go/bin:$PATH
 
 #
 # Install go 1.23.
@@ -15,21 +15,18 @@ RUN	apt-get update \
         libc6-dev \
         pkg-config \
     && rm -rf /var/lib/apt/lists/*
-RUN curl -o go.tgz https://dl.google.com/go/go$GOLANG_VERSION.linux-amd64.tar.gz \
+RUN curl -o go.tgz https://dl.google.com/go/go$GOLANG_VERSION.linux-$(dpkg --print-architecture).tar.gz \
     && tar -C /usr/local -xzf go.tgz \
     && rm go.tgz \
     && go version
 ENV GOPATH=/go
-ENV PATH $GOPATH/bin:$PATH
+ENV PATH=$GOPATH/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 WORKDIR $GOPATH
 USER kumano_ryo
 #
-# install gopkgs
-RUN go install github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest
-#
-# install go-outline
-RUN go install github.com/ramya-rao-a/go-outline@latest
+# install gopls
+RUN go install golang.org/x/tools/gopls@latest
 #
 # install gotests
 RUN go install github.com/cweill/gotests/gotests@latest
@@ -49,12 +46,6 @@ RUN go install github.com/go-delve/delve/cmd/dlv@latest
 # install golangci-lint
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 #RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-#
-# install gopls
-RUN go install golang.org/x/tools/gopls@latest
-#
-# install mvdan/gofumpt
-RUN go install mvdan.cc/gofumpt@latest
 # set env
 ENV DEBIAN_FRONTEND=dialog
-LABEL org.opencontainers.image.source https://github.com/bearfield/dot-devcontainer-golang-1.23
+LABEL org.opencontainers.image.source="https://github.com/bearfield/dot-devcontainer-golang-1.23"
