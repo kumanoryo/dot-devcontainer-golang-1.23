@@ -8,7 +8,7 @@ on:
 jobs:
   push_to_registry:
     name: Build docker image from Dockerfile
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Set container image name and tag
         run: |
